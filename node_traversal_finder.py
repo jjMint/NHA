@@ -1,3 +1,7 @@
+#----------------------------------------------------------------------------------------------------------------
+#In order to run this example code, you must first install 
+# pip3 install newtorkx
+# pip3 install pyvis
 import networkx as nx
 from pyvis import network as pvnet
 #----------------------------------------------------------------------------------------------------------------
