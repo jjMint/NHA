@@ -1,0 +1,80 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 100%;
+            background-color: #222222;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "red", "font": {"color": "white"}, "id": "ClientJ", "label": "ClientJ", "shape": "dot", "size": 30}, {"color": "red", "font": {"color": "white"}, "id": "ClientD", "label": "ClientD", "shape": "dot", "size": 30}, {"color": "red", "font": {"color": "white"}, "id": "ClientK", "label": "ClientK", "shape": "dot", "size": 30}, {"color": "red", "font": {"color": "white"}, "id": "ClientF", "label": "ClientF", "shape": "dot", "size": 30}, {"color": "red", "font": {"color": "white"}, "id": "SwitchA", "label": "SwitchA", "shape": "dot", "size": 30}, {"color": "red", "font": {"color": "white"}, "id": "ClientH", "label": "ClientH", "shape": "dot", "size": 30}, {"color": "green", "font": {"color": "white"}, "id": "ClientA", "label": "ClientA", "shape": "dot", "size": 40}, {"color": "red", "font": {"color": "white"}, "id": "ClientE", "label": "ClientE", "shape": "dot", "size": 30}, {"color": "red", "font": {"color": "white"}, "id": "ClientI", "label": "ClientI", "shape": "dot", "size": 30}, {"color": "red", "font": {"color": "white"}, "id": "ClientC", "label": "ClientC", "shape": "dot", "size": 30}, {"color": "green", "font": {"color": "white"}, "id": "ClientB", "label": "ClientB", "shape": "dot", "size": 40}, {"color": "red", "font": {"color": "white"}, "id": "ClientG", "label": "ClientG", "shape": "dot", "size": 30}, {"color": "red", "font": {"color": "white"}, "id": "SwitchB", "label": "SwitchB", "shape": "dot", "size": 30}]);
+        edges = new vis.DataSet([{"arrows": "to", "color": "red", "from": "ClientJ", "to": "SwitchB", "width": 1}, {"arrows": "to", "color": "red", "from": "ClientJ", "to": "ClientB", "width": 1}, {"arrows": "to", "color": "red", "from": "ClientD", "to": "SwitchA", "width": 1}, {"arrows": "to", "color": "red", "from": "ClientK", "to": "SwitchB", "width": 1}, {"arrows": "to", "color": "red", "from": "ClientF", "to": "SwitchB", "width": 1}, {"arrows": "to", "color": "red", "from": "SwitchA", "to": "ClientA", "width": 1}, {"arrows": "to", "color": "red", "from": "SwitchA", "to": "ClientB", "width": 1}, {"arrows": "to", "color": "red", "from": "SwitchA", "to": "ClientC", "width": 1}, {"arrows": "to", "color": "red", "from": "SwitchA", "to": "ClientD", "width": 1}, {"arrows": "to", "color": "red", "from": "SwitchA", "to": "ClientE", "width": 1}, {"arrows": "to", "color": "red", "from": "SwitchA", "to": "SwitchB", "width": 1}, {"arrows": "to", "color": "red", "from": "ClientH", "to": "SwitchB", "width": 1}, {"arrows": "to", "color": "red", "from": "ClientH", "to": "ClientB", "width": 1}, {"arrows": "to", "color": "red", "from": "ClientA", "to": "SwitchA", "width": 1}, {"arrows": "to", "color": "green", "from": "ClientA", "to": "ClientB", "width": 5}, {"arrows": "to", "color": "red", "from": "ClientE", "to": "SwitchA", "width": 1}, {"arrows": "to", "color": "red", "from": "ClientI", "to": "SwitchB", "width": 1}, {"arrows": "to", "color": "red", "from": "ClientC", "to": "SwitchA", "width": 1}, {"arrows": "to", "color": "red", "from": "ClientB", "to": "SwitchA", "width": 1}, {"arrows": "to", "color": "red", "from": "ClientB", "to": "ClientK", "width": 1}, {"arrows": "to", "color": "red", "from": "ClientG", "to": "SwitchB", "width": 1}, {"arrows": "to", "color": "red", "from": "SwitchB", "to": "ClientF", "width": 1}, {"arrows": "to", "color": "red", "from": "SwitchB", "to": "ClientG", "width": 1}, {"arrows": "to", "color": "red", "from": "SwitchB", "to": "ClientH", "width": 1}, {"arrows": "to", "color": "red", "from": "SwitchB", "to": "ClientI", "width": 1}, {"arrows": "to", "color": "red", "from": "SwitchB", "to": "ClientJ", "width": 1}, {"arrows": "to", "color": "red", "from": "SwitchB", "to": "ClientK", "width": 1}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {"physics": {"forceAtlas2Based": {"gravitationalConstant": -100, "centralGravity": 0.01, "springLength": 100, "springConstant": 0.09, "avoidOverlap": 1}, "minVelocity": 0.75, "solver": "forceAtlas2Based", "timestep": 0.22}};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

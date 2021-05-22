@@ -225,8 +225,19 @@ def main():
     print("\nInput the nodes you are determing the likely threat path for: \n")
 
     #Get traversal input
-    beginning_node = input("Please input starting node: ")
-    target_node = input("Please input target node: ")
+    beginning_node = None
+    target_node = None
+    
+    while (beginning_node not in graph.nodes()):
+        beginning_node = input("Please input starting node: ")
+        if (beginning_node not in graph.nodes()) :
+            print("\nNode not present in graph, please try again\n")
+
+    while (target_node not in graph.nodes()):
+        target_node = input("Please input target node: ")
+        if (target_node not in graph.nodes()) :
+            print("\nNode not present in graph, please try again\n")
+            
     print("\nSearching............\n")
     #Traverse and retrieve results
     path = astar_search(graph, heuristics, beginning_node, target_node)
