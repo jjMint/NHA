@@ -1,3 +1,5 @@
+import networkx as nx
+from pyvis import network as pvnet
 #----------------------------------------------------------------------------------------------------------------
 #Derived weights from report table
 
@@ -109,10 +111,12 @@ def astar_search(graph, heuristics, start, end):
         # Check if we have reached the goal, return the path
         if current_node == goal_node:
             path = []
+            # Displays the final cost instead of at each node. This allows me to use nx.add_path(sg, path) to build subgraph.
+            path.append("Total cost = " + str(current_node.g))
             while current_node != start_node:
-                path.append(current_node.name + ': ' + str(current_node.g))
+                path.append([current_node.name, "cost = " + str(current_node.g)])
                 current_node = current_node.parent
-            path.append(start_node.name + ': ' + str(start_node.g))
+            path.append([start_node.name, "cost = " + str(current_node.g)])
             # Return reversed path
             return path[::-1]
         # Get neighbours
@@ -210,7 +214,99 @@ def main():
 
     # Run the search algorithm
     path = astar_search(graph, heuristics, 'ClientA', 'ClientI')
-    print(path)
-    print()
+    node_titles = [item[0] for item in path[:-1]]
+    print("-------------------------------------------------------------------------------------")
+    print("-------------------------------------------------------------------------------------")
+    print("Search completed\n")
+    print("Displaying results.....")
+    print("-------------------------------------------------------------------------------------")
+    for i in path:
+        print(i)
+    print("-------------------------------------------------------------------------------------")
+    print("Based on the search algorithm, nodes of interest are: \n")
+    for i in node_titles:
+        print(i)
+    print("-------------------------------------------------------------------------------------")
+    print("-------------------------------------------------------------------------------------")
+    print("Generating graph visualisation..........\n")
+    
+    # Build nxGraph
+    G = nx.MultiDiGraph()
+    G.add_nodes_from(graph.nodes())
+    G.add_edge('ClientA', 'SwitchA', label=2)
+    G.add_edge('ClientB', 'SwitchA', label=2)
+    G.add_edge('ClientC', 'SwitchA', label=2)
+    G.add_edge('ClientD', 'SwitchA', label=2)
+    G.add_edge('ClientE', 'SwitchA', label=2)
+    G.add_edge('SwitchA', 'ClientA', label=4)
+    G.add_edge('SwitchA', 'ClientB', label=4)
+    G.add_edge('SwitchA', 'ClientC', label=4)
+    G.add_edge('SwitchA', 'ClientD', label=4)
+    G.add_edge('SwitchA', 'ClientE', label=4)
+    G.add_edge('SwitchA', 'SwitchB', label=4)
+    G.add_edge('ClientF', 'SwitchB', label=2)
+    G.add_edge('ClientG', 'SwitchB', label=2)
+    G.add_edge('ClientH', 'SwitchB', label=2)
+    G.add_edge('ClientI', 'SwitchB', label=2)
+    G.add_edge('ClientJ', 'SwitchB', label=2)
+    G.add_edge('ClientK', 'SwitchB', label=2)
+    G.add_edge('SwitchB', 'ClientF', label=4)
+    G.add_edge('SwitchB', 'ClientG', label=4)
+    G.add_edge('SwitchB', 'ClientH', label=4)
+    G.add_edge('SwitchB', 'ClientI', label=4)
+    G.add_edge('SwitchB', 'ClientJ', label=4)
+    G.add_edge('SwitchB', 'ClientK', label=4)
+    G.add_edge('ClientA', 'ClientB', label=2)
+    G.add_edge('ClientJ', 'ClientB', label=2)
+    G.add_edge('ClientH', 'ClientB', label=2)
+    G.add_edge('ClientB', 'ClientK', label=2)
+
+    # Build SubGraph
+    sg = nx.MultiDiGraph()
+    nx.add_path(sg, node_titles)
+
+    def visualize(G, sg, name='attack-graph.html'):
+        N = pvnet.Network(height='100%', width='100%', bgcolor='#222222', font_color='white', directed=True)
+        opts = '''
+            var options = {
+              "physics": {
+                "forceAtlas2Based": {
+                  "gravitationalConstant": -100,
+                  "centralGravity": 0.01,
+                  "springLength": 100,
+                  "springConstant": 0.09,
+                  "avoidOverlap": 1
+                },
+                "minVelocity": 0.75,
+                "solver": "forceAtlas2Based",
+                "timestep": 0.22
+              }
+            }
+        '''
+
+        N.set_options(opts)
+
+        for n in G:
+            if n in sg:  # if the node is part of the sub-graph
+                color = 'green'
+                size = 40
+            else:
+                color = 'red'
+                size = 30
+            N.add_node(n, label=n, color=color, size=size)
+
+        for e in G.edges():
+            if e in sg.edges():  # if the edge is part of sub-graph
+                color = 'green'
+                width = 5
+            else:
+                color = 'red'
+                width = 1
+            N.add_edge((e[0]), (e[1]), color=color, width=width)
+
+        return N.show(name)
+
+    visualize(G, sg)
+    
 # Tell python to run main method
 if __name__ == "__main__": main()
