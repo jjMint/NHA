@@ -217,7 +217,19 @@ def main():
     heuristics['SwitchB'] = medium
 
     # Run the search algorithm
-    path = astar_search(graph, heuristics, 'ClientA', 'ClientI')
+    print("-------------------------------------------------------------------------------------")
+    print("-------------------------------------------------------------------------------------")
+    print("Current Graph Nodes are: \n")
+    for i in graph.nodes():
+        print(i)
+    print("\nInput the nodes you are determing the likely threat path for: \n")
+
+    #Get traversal input
+    beginning_node = input("Please input starting node: ")
+    target_node = input("Please input target node: ")
+    print("\nSearching............\n")
+    #Traverse and retrieve results
+    path = astar_search(graph, heuristics, beginning_node, target_node)
     node_titles = [item[0] for item in path[:-1]]
     print("-------------------------------------------------------------------------------------")
     print("-------------------------------------------------------------------------------------")
