@@ -37,7 +37,7 @@ client_client = 1
 #----------------------------------------------------------------------------------------------------------------
 
 
-# This class represent a graph
+# This class represent an enterprise network graph
 class Graph:
     # Initialize the class
     def __init__(self, graph_dict=None, directed=True):
@@ -70,15 +70,15 @@ class Graph:
         return list(nodes)
 #----------------------------------------------------------------------------------------------------------------
 
-# This class represent a node
+# This class represent a client / switch / firewall e.t.c
 class Node:
     # Initialize the class
     def __init__(self, name:str, parent:str):
         self.name = name
         self.parent = parent
         self.g = 0 # Distance to start node
-        self.h = 0 # Distance to goal node
-        self.f = 0 # Total cost
+        self.h = 0 # Vulnerabilies present on the node
+        self.f = 0 # Total cost to traverse
     # Compare nodes
     def __eq__(self, other):
         return self.name == other.name
@@ -92,7 +92,7 @@ class Node:
 
 #----------------------------------------------------------------------------------------------------------------
 
-# A* search
+# A* search (For an explanation of implementation please see the report component on A* search)
 def astar_search(graph, heuristics, start, end):
     
     # Create lists for open nodes and closed nodes
