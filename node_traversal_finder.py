@@ -220,9 +220,12 @@ def main():
     print("-------------------------------------------------------------------------------------")
     print("-------------------------------------------------------------------------------------")
     print("Current Graph Nodes are: \n")
+    print("-------------------------------------------------------------------------------------")
     for i in graph.nodes():
         print(i)
-    print("\nInput the nodes you are determing the likely threat path for: \n")
+    print("-------------------------------------------------------------------------------------")
+
+    print("\nInput the nodes you are determining the likely threat path for: \n")
 
     #Get traversal input
     beginning_node = None
