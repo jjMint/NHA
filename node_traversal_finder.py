@@ -1,3 +1,4 @@
+#This code has been adapted and inspired by (https://www.annytab.com/a-star-search-algorithm-in-python/) to fit the purpose of our research project
 #----------------------------------------------------------------------------------------------------------------
 #In order to run this example code, you must first install 
 # pip3 install newtorkx
