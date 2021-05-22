@@ -33,3 +33,5 @@ Run python3 node_traversal_finder.py
 
 At this stage if a new graph is wanted, code changes must be made, however it is possible to make adjustments to allow for a csv / json file input in the future
 
+This code has been adapted from (https://www.annytab.com/a-star-search-algorithm-in-python/) to fit the purpose of our research project
+
